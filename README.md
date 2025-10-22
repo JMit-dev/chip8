@@ -154,17 +154,6 @@ Use the **Step** button to execute one instruction at a time while watching:
 
 This makes it easy to understand exactly what each instruction does.
 
-### Extending the Emulator
-
-Ideas for enhancement:
-- Add disassembler to show current instruction in assembly
-- Implement breakpoints for debugging
-- Add instruction history/trace
-- Create instruction set reference panel
-- Add performance metrics (FPS, instructions/sec)
-- Implement save/load state
-- Add sound generation for sound timer
-
 ## Credits
 
 - **ROMs**: Public domain games from [Zophar's Domain](https://www.zophar.net/pdroms/chip8/chip-8-games-pack.html)
