@@ -44,7 +44,7 @@ No build tools required! This is pure vanilla JavaScript.
 
 1. Clone the repository:
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/JMit-dev/chip8-tutorial.git
 cd chip8
 ```
 
