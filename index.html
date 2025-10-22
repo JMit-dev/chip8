@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHIP-8 Emulator - Educational</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>CHIP-8 Emulator</h1>
+    <p class="subtitle">An educational emulator showing internal state and execution</p>
+  </header>
+
+  <main class="container">
+    <section class="control-panel">
+      <div class="controls-group">
+        <button id="play-btn" class="btn btn-success">Play</button>
+        <button id="pause-btn" class="btn btn-warning">Pause</button>
+        <button id="step-btn" class="btn btn-info">Step</button>
+        <button id="reset-btn" class="btn btn-danger">Reset</button>
+      </div>
+      <div class="controls-group">
+        <label for="rom-input" class="btn btn-primary">
+          Load ROM
+          <input type="file" id="rom-input" accept=".ch8,.rom" style="display: none;">
+        </label>
+      </div>
+      <div class="controls-group">
+        <label>
+          Speed: <span id="speed-value">10</span> ops/frame
+          <input type="range" id="speed-slider" min="1" max="30" value="10">
+        </label>
+      </div>
+    </section>
+
+    <section class="main-grid">
+      <div class="display-section">
+        <div class="widget">
+          <div class="widget-title">Display (64x32)</div>
+          <canvas id="display"></canvas>
+        </div>
+      </div>
+
+      <div class="registers-section">
+        <div class="widget" id="registers-container"></div>
+      </div>
+
+      <div class="memory-section">
+        <div class="widget" id="memory-container"></div>
+      </div>
+
+      <div class="stack-section">
+        <div class="widget" id="stack-container"></div>
+      </div>
+
+      <div class="status-section">
+        <div class="widget" id="status-container"></div>
+      </div>
+    </section>
+
+    <section class="info-panel">
+      <h2>About CHIP-8</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>Memory</h3>
+          <p>4KB RAM (0x000-0xFFF)</p>
+          <ul>
+            <li>0x000-0x1FF: Interpreter & fonts</li>
+            <li>0x200-0xFFF: Program space</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h3>Registers</h3>
+          <p>16 general purpose 8-bit registers (V0-VF)</p>
+          <ul>
+            <li>VF: Flag register (carry/borrow/collision)</li>
+            <li>I: 12-bit address register</li>
+            <li>PC: Program counter</li>
+            <li>SP: Stack pointer</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h3>Display</h3>
+          <p>64x32 monochrome display</p>
+          <ul>
+            <li>Sprites are 8 pixels wide</li>
+            <li>XOR drawing mode</li>
+            <li>Collision detection via VF</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h3>Timers</h3>
+          <p>Two 60Hz countdown timers</p>
+          <ul>
+            <li>Delay timer: General timing</li>
+            <li>Sound timer: Beeps when non-zero</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Educational CHIP-8 Emulator - Learn how emulators work by watching the internal state</p>
+  </footer>
+
+  <script src="js/cpu.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/keyboard.js"></script>
+  <script src="js/widgets/registers-widget.js"></script>
+  <script src="js/widgets/memory-widget.js"></script>
+  <script src="js/widgets/stack-widget.js"></script>
+  <script src="js/widgets/status-widget.js"></script>
+  <script src="js/emulator.js"></script>
+</body>
+</html>
