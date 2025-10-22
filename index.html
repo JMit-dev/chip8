@@ -58,6 +58,18 @@
           <input type="range" id="speed-slider" min="1" max="30" value="10">
         </label>
       </div>
+      <div class="controls-group">
+        <label>
+          Volume: <span id="volume-value">10</span>%
+          <input type="range" id="volume-slider" min="0" max="100" value="10">
+        </label>
+      </div>
+      <div class="controls-group">
+        <label>
+          Frequency: <span id="frequency-value">440</span> Hz
+          <input type="range" id="frequency-slider" min="200" max="800" value="440" step="10">
+        </label>
+      </div>
     </section>
 
     <section class="main-grid">
@@ -133,6 +145,7 @@
   <script src="js/cpu.js"></script>
   <script src="js/renderer.js"></script>
   <script src="js/keyboard.js"></script>
+  <script src="js/sound.js"></script>
   <script src="js/widgets/registers-widget.js"></script>
   <script src="js/widgets/memory-widget.js"></script>
   <script src="js/widgets/stack-widget.js"></script>

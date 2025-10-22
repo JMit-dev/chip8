@@ -3,9 +3,11 @@ class Emulator {
     this.cpu = new CPU();
     this.renderer = new Renderer(10);
     this.keyboard = new Keyboard();
+    this.sound = new Sound();
 
     this.cpu.renderer = this.renderer;
     this.cpu.keyboard = this.keyboard;
+    this.cpu.sound = this.sound;
 
     this.registersWidget = new RegistersWidget('registers-container');
     this.memoryWidget = new MemoryWidget('memory-container');
@@ -33,6 +35,21 @@ class Emulator {
     speedSlider.addEventListener('input', (e) => {
       this.cpu.speed = parseInt(e.target.value);
       speedValue.textContent = e.target.value;
+    });
+
+    const volumeSlider = document.getElementById('volume-slider');
+    const volumeValue = document.getElementById('volume-value');
+    volumeSlider.addEventListener('input', (e) => {
+      const volume = parseInt(e.target.value) / 100;
+      this.sound.setVolume(volume);
+      volumeValue.textContent = e.target.value;
+    });
+
+    const frequencySlider = document.getElementById('frequency-slider');
+    const frequencyValue = document.getElementById('frequency-value');
+    frequencySlider.addEventListener('input', (e) => {
+      this.sound.setFrequency(parseInt(e.target.value));
+      frequencyValue.textContent = e.target.value;
     });
   }
 
@@ -129,9 +146,11 @@ class Emulator {
 
   reset() {
     this.running = false;
+    this.sound.stop();
     this.cpu = new CPU();
     this.cpu.renderer = this.renderer;
     this.cpu.keyboard = this.keyboard;
+    this.cpu.sound = this.sound;
     this.renderer.clear();
     this.renderer.render();
     this.updateWidgets();

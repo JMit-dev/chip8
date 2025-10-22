@@ -69,7 +69,11 @@ class CPU {
   }
 
   playSound() {
-    // Sound implementation handled externally
+    if (this.soundTimer > 0 && this.sound) {
+      this.sound.play();
+    } else if (this.sound) {
+      this.sound.stop();
+    }
   }
 
   executeInstruction(opcode) {
