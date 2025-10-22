@@ -1,0 +1,109 @@
+class Emulator {
+  constructor() {
+    this.cpu = new CPU();
+    this.renderer = new Renderer(10);
+    this.keyboard = new Keyboard();
+
+    this.cpu.renderer = this.renderer;
+    this.cpu.keyboard = this.keyboard;
+
+    this.registersWidget = new RegistersWidget('registers-container');
+    this.memoryWidget = new MemoryWidget('memory-container');
+    this.stackWidget = new StackWidget('stack-container');
+    this.statusWidget = new StatusWidget('status-container');
+
+    this.fpsInterval = 1000 / 60;
+    this.then = Date.now();
+    this.running = false;
+
+    this.setupControls();
+  }
+
+  setupControls() {
+    document.getElementById('play-btn').addEventListener('click', () => this.start());
+    document.getElementById('pause-btn').addEventListener('click', () => this.pause());
+    document.getElementById('step-btn').addEventListener('click', () => this.step());
+    document.getElementById('reset-btn').addEventListener('click', () => this.reset());
+
+    document.getElementById('rom-input').addEventListener('change', (e) => this.loadROM(e));
+
+    const speedSlider = document.getElementById('speed-slider');
+    const speedValue = document.getElementById('speed-value');
+    speedSlider.addEventListener('input', (e) => {
+      this.cpu.speed = parseInt(e.target.value);
+      speedValue.textContent = e.target.value;
+    });
+  }
+
+  loadROM(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const buffer = e.target.result;
+      const program = new Uint8Array(buffer);
+      this.reset();
+      this.cpu.loadProgram(program);
+      this.updateWidgets();
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  start() {
+    if (!this.running) {
+      this.running = true;
+      this.loop();
+    }
+  }
+
+  pause() {
+    this.running = false;
+  }
+
+  step() {
+    this.cpu.cycle();
+    this.renderer.render();
+    this.updateWidgets();
+  }
+
+  reset() {
+    this.running = false;
+    this.cpu = new CPU();
+    this.cpu.renderer = this.renderer;
+    this.cpu.keyboard = this.keyboard;
+    this.renderer.clear();
+    this.renderer.render();
+    this.updateWidgets();
+  }
+
+  loop() {
+    if (!this.running) return;
+
+    requestAnimationFrame(() => this.loop());
+
+    const now = Date.now();
+    const elapsed = now - this.then;
+
+    if (elapsed > this.fpsInterval) {
+      this.then = now - (elapsed % this.fpsInterval);
+
+      this.cpu.cycle();
+      this.renderer.render();
+      this.updateWidgets();
+    }
+  }
+
+  updateWidgets() {
+    this.registersWidget.update(this.cpu);
+    this.memoryWidget.update(this.cpu);
+    this.stackWidget.update(this.cpu);
+    this.statusWidget.update(this.cpu, this.keyboard);
+  }
+}
+
+let emulator;
+window.addEventListener('DOMContentLoaded', () => {
+  emulator = new Emulator();
+  emulator.updateWidgets();
+});
