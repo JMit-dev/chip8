@@ -40,13 +40,38 @@ class Emulator {
     if (!file) return;
 
     const reader = new FileReader();
+
     reader.onload = (e) => {
-      const buffer = e.target.result;
-      const program = new Uint8Array(buffer);
-      this.reset();
-      this.cpu.loadProgram(program);
-      this.updateWidgets();
+      try {
+        const buffer = e.target.result;
+        const program = new Uint8Array(buffer);
+
+        if (program.length === 0) {
+          alert('Error: File is empty');
+          return;
+        }
+
+        if (program.length > 4096 - 0x200) {
+          alert(`Error: ROM too large (${program.length} bytes). Maximum is ${4096 - 0x200} bytes.`);
+          return;
+        }
+
+        this.reset();
+        this.cpu.loadProgram(program);
+        this.updateWidgets();
+
+        console.log(`ROM loaded successfully: ${file.name} (${program.length} bytes)`);
+      } catch (error) {
+        alert(`Error loading ROM: ${error.message}`);
+        console.error('ROM loading error:', error);
+      }
     };
+
+    reader.onerror = () => {
+      alert('Error reading file');
+      console.error('File reader error:', reader.error);
+    };
+
     reader.readAsArrayBuffer(file);
   }
 
