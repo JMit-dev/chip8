@@ -25,7 +25,8 @@ class Emulator {
     document.getElementById('step-btn').addEventListener('click', () => this.step());
     document.getElementById('reset-btn').addEventListener('click', () => this.reset());
 
-    document.getElementById('rom-input').addEventListener('change', (e) => this.loadROM(e));
+    document.getElementById('rom-select').addEventListener('change', (e) => this.loadROMFromSelect(e));
+    document.getElementById('rom-input').addEventListener('change', (e) => this.loadROMFromFile(e));
 
     const speedSlider = document.getElementById('speed-slider');
     const speedValue = document.getElementById('speed-value');
@@ -35,7 +36,41 @@ class Emulator {
     });
   }
 
-  loadROM(event) {
+  async loadROMFromSelect(event) {
+    const romName = event.target.value;
+    if (!romName) return;
+
+    try {
+      const response = await fetch(`roms/${romName}`);
+      if (!response.ok) {
+        throw new Error(`Failed to load ROM: ${response.statusText}`);
+      }
+
+      const buffer = await response.arrayBuffer();
+      const program = new Uint8Array(buffer);
+
+      if (program.length === 0) {
+        alert('Error: ROM file is empty');
+        return;
+      }
+
+      if (program.length > 4096 - 0x200) {
+        alert(`Error: ROM too large (${program.length} bytes). Maximum is ${4096 - 0x200} bytes.`);
+        return;
+      }
+
+      this.reset();
+      this.cpu.loadProgram(program);
+      this.updateWidgets();
+
+      console.log(`ROM loaded successfully: ${romName} (${program.length} bytes)`);
+    } catch (error) {
+      alert(`Error loading ROM: ${error.message}`);
+      console.error('ROM loading error:', error);
+    }
+  }
+
+  loadROMFromFile(event) {
     const file = event.target.files[0];
     if (!file) return;
 

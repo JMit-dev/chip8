@@ -98,6 +98,29 @@ input[type="range"] {
   margin-left: 10px;
 }
 
+select {
+  padding: 8px 16px;
+  border: 2px solid #007bff;
+  border-radius: 5px;
+  background: white;
+  color: #333;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+select:hover {
+  background: #f0f8ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+select:focus {
+  outline: none;
+  border-color: #0056b3;
+}
+
 .main-grid {
   display: grid;
   grid-template-columns: 640px 400px 1fr;
